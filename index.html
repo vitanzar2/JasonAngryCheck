@@ -99,15 +99,26 @@
             <div class="box normal" onclick="updateStatus('Normal', 'Jason Quick is currently calm.')">Normal</div>
             <div class="box warning" onclick="updateStatus('Warning', 'Jason Quick is currently irritated.')">Warning</div>
             <div class="box danger" onclick="updateStatus('Danger', 'Jason Quick is currently angry.')">Danger</div>
-            <div class="box thermonuclear" onclick="updateStatus('Thermonuclear', 'Jason Quick is in a thermonuclear state of rage!')">Thermonuclear</div>
+            <div class="box thermonuclear" onclick="updateStatus('Thermonuclear', 'Jason Quick is in a thermonuclear state of rage. It is too late.')">Thermonuclear</div>
         </div>
         <div class="log-container" id="logContainer"></div>
     </div>
 
     <script>
-        // Load previous log entries from localStorage
+        // Load previous log entries and last clicked status from localStorage
         document.addEventListener('DOMContentLoaded', function() {
             var logEntries = JSON.parse(localStorage.getItem('logEntries')) || [];
+            var lastStatus = localStorage.getItem('lastStatus');
+
+            // Restore last clicked status
+            if (lastStatus) {
+                var statusBox = document.querySelector('.box.' + lastStatus);
+                var level = statusBox.textContent;
+                var message = statusBox.dataset.message;
+                updateStatus(level, message, false); // Don't log this status as it's just restoration
+            }
+
+            // Display previous log entries
             var logContainer = document.getElementById('logContainer');
             logEntries.forEach(function(entry) {
                 var logEntry = document.createElement('div');
@@ -117,7 +128,7 @@
             });
         });
 
-        function updateStatus(level, message) {
+        function updateStatus(level, message, log = true) {
             var timestamp = new Date().toLocaleString();
             document.querySelector('.anger-level').textContent = level;
             document.querySelector('.status-update').textContent = message;
@@ -130,9 +141,14 @@
             logContainer.scrollTop = logContainer.scrollHeight;
 
             // Store log entry in localStorage
-            var logEntries = JSON.parse(localStorage.getItem('logEntries')) || [];
-            logEntries.push(logEntry);
-            localStorage.setItem('logEntries', JSON.stringify(logEntries));
+            if (log) {
+                var logEntries = JSON.parse(localStorage.getItem('logEntries')) || [];
+                logEntries.push(logEntry);
+                localStorage.setItem('logEntries', JSON.stringify(logEntries));
+            }
+
+            // Store last clicked status in localStorage
+            localStorage.setItem('lastStatus', level);
         }
     </script>
 </body>
