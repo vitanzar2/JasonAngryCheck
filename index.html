@@ -40,6 +40,36 @@
 
     .anger-level {
         font-weight: bold;
+        color: #ff0000;
+    }
+
+    .status-box {
+        margin-top: 20px;
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .status-box .box {
+        cursor: pointer;
+        width: 120px;
+        height: 80px;
+        text-align: center;
+        line-height: 80px;
+        border-radius: 8px;
+        font-weight: bold;
+    }
+
+    .log-container {
+        margin-top: 20px;
+        max-height: 200px;
+        overflow-y: scroll;
+        border: 1px solid #ccc;
+        padding: 10px;
+    }
+
+    .log-entry {
+        font-size: 14px;
+        margin-bottom: 5px;
     }
 
     .normal { background-color: #2ecc71; }
@@ -60,23 +90,47 @@
     <div class="container">
         <h1>Jason Quick's Anger Status</h1>
         <div class="status">
-            Current Anger Level: <span class="anger-level" id="angerLevel">High</span>
+            Current Anger Level: <span class="anger-level">High</span>
         </div>
         <div class="status-update">
             Jason Quick is currently very angry. Please approach with caution.
         </div>
         <div class="status-box">
-            <div class="box normal" onclick="updateStatus('Normal', 'Jason Quick is currently calm.', 'green')">Normal</div>
-            <div class="box warning" onclick="updateStatus('Warning', 'Jason Quick is currently irritated.', 'yellow')">Warning</div>
-            <div class="box danger" onclick="updateStatus('Danger', 'Jason Quick is currently angry.', 'red')">Danger</div>
-            <div class="box thermonuclear" onclick="updateStatus('Thermonuclear', 'Jason Quick is in a thermonuclear state of rage. It is already too late.', 'flashing')">Thermonuclear</div>
+            <div class="box normal" onclick="updateStatus('Normal', 'Jason Quick is currently calm.')">Normal</div>
+            <div class="box warning" onclick="updateStatus('Warning', 'Jason Quick is currently irritated.')">Warning</div>
+            <div class="box danger" onclick="updateStatus('Danger', 'Jason Quick is currently angry.')">Danger</div>
+            <div class="box thermonuclear" onclick="updateStatus('Thermonuclear', 'Jason Quick is in a thermonuclear state of rage. It is too late.')">Thermonuclear</div>
         </div>
+        <div class="log-container" id="logContainer"></div>
     </div>
 
     <script>
-        function updateStatus(level, message, color) {
+        // Load previous log entries and last clicked status from localStorage
+        document.addEventListener('DOMContentLoaded', function() {
+            var logEntries = JSON.parse(localStorage.getItem('logEntries')) || [];
+            var lastStatus = localStorage.getItem('lastStatus');
+
+            // Restore last clicked status
+            if (lastStatus) {
+                var statusBox = document.querySelector('.box.' + lastStatus);
+                var level = statusBox.textContent;
+                var message = statusBox.dataset.message;
+                updateStatus(level, message, false); // Don't log this status as it's just restoration
+            }
+
+            // Display previous log entries
+            var logContainer = document.getElementById('logContainer');
+            logEntries.forEach(function(entry) {
+                var logEntry = document.createElement('div');
+                logEntry.className = 'log-entry';
+                logEntry.textContent = entry;
+                logContainer.appendChild(logEntry);
+            });
+        });
+
+        function updateStatus(level, message, log = true) {
             var timestamp = new Date().toLocaleString();
-            document.getElementById('angerLevel').textContent = level;
+            document.querySelector('.anger-level').textContent = level;
             document.querySelector('.status-update').textContent = message;
             var logEntry = timestamp + ' - ' + message;
             var logContainer = document.getElementById('logContainer');
@@ -86,14 +140,15 @@
             logContainer.appendChild(logEntryElement);
             logContainer.scrollTop = logContainer.scrollHeight;
 
-            // Set anger level color
-            var angerLevel = document.getElementById('angerLevel');
-            angerLevel.style.color = color;
-
             // Store log entry in localStorage
-            var logEntries = JSON.parse(localStorage.getItem('logEntries')) || [];
-            logEntries.push(logEntry);
-            localStorage.setItem('logEntries', JSON.stringify(logEntries));
+            if (log) {
+                var logEntries = JSON.parse(localStorage.getItem('logEntries')) || [];
+                logEntries.push(logEntry);
+                localStorage.setItem('logEntries', JSON.stringify(logEntries));
+            }
+
+            // Store last clicked status in localStorage
+            localStorage.setItem('lastStatus', level);
         }
     </script>
 </body>
