@@ -83,16 +83,17 @@
             Jason Quick is currently very angry. Please approach with caution.
         </div>
         <div class="status-box">
-            <div class="box normal" onclick="updateStatus('Normal')">Normal</div>
-            <div class="box warning" onclick="updateStatus('Warning')">Warning</div>
-            <div class="box danger" onclick="updateStatus('Danger')">Danger</div>
-            <div class="box thermonuclear" onclick="updateStatus('Thermonuclear')">Thermonuclear</div>
+            <div class="box normal" onclick="updateStatus('Normal', 'Jason Quick is currently calm.')">Normal</div>
+            <div class="box warning" onclick="updateStatus('Warning', 'Jason Quick is currently irritated.')">Warning</div>
+            <div class="box danger" onclick="updateStatus('Danger', 'Jason Quick is currently angry.')">Danger</div>
+            <div class="box thermonuclear" onclick="updateStatus('Thermonuclear', 'Jason Quick is in a thermonuclear state of rage!')">Thermonuclear</div>
         </div>
     </div>
 
     <script>
-        function updateStatus(level) {
+        function updateStatus(level, message) {
             document.querySelector('.anger-level').textContent = level;
+            document.querySelector('.status-update').textContent = message;
         }
     </script>
 </body>
