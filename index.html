@@ -105,15 +105,34 @@
     </div>
 
     <script>
+        // Load previous log entries from localStorage
+        document.addEventListener('DOMContentLoaded', function() {
+            var logEntries = JSON.parse(localStorage.getItem('logEntries')) || [];
+            var logContainer = document.getElementById('logContainer');
+            logEntries.forEach(function(entry) {
+                var logEntry = document.createElement('div');
+                logEntry.className = 'log-entry';
+                logEntry.textContent = entry;
+                logContainer.appendChild(logEntry);
+            });
+        });
+
         function updateStatus(level, message) {
             var timestamp = new Date().toLocaleString();
             document.querySelector('.anger-level').textContent = level;
             document.querySelector('.status-update').textContent = message;
-            var logEntry = document.createElement('div');
-            logEntry.className = 'log-entry';
-            logEntry.textContent = timestamp + ' - ' + message;
-            document.getElementById('logContainer').appendChild(logEntry);
-            document.getElementById('logContainer').scrollTop = document.getElementById('logContainer').scrollHeight;
+            var logEntry = timestamp + ' - ' + message;
+            var logContainer = document.getElementById('logContainer');
+            var logEntryElement = document.createElement('div');
+            logEntryElement.className = 'log-entry';
+            logEntryElement.textContent = logEntry;
+            logContainer.appendChild(logEntryElement);
+            logContainer.scrollTop = logContainer.scrollHeight;
+
+            // Store log entry in localStorage
+            var logEntries = JSON.parse(localStorage.getItem('logEntries')) || [];
+            logEntries.push(logEntry);
+            localStorage.setItem('logEntries', JSON.stringify(logEntries));
         }
     </script>
 </body>
