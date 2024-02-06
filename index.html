@@ -42,6 +42,34 @@
         font-weight: bold;
         color: #ff0000;
     }
+
+    .status-box {
+        margin-top: 20px;
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .status-box .box {
+        width: 120px;
+        height: 80px;
+        text-align: center;
+        line-height: 80px;
+        border-radius: 8px;
+        font-weight: bold;
+    }
+
+    .normal { background-color: #2ecc71; }
+    .warning { background-color: #f1c40f; }
+    .danger { background-color: #e74c3c; }
+    .thermonuclear {
+        background-image: linear-gradient(-45deg, #ff0000, #ffff00);
+        animation: flashing 1s infinite alternate;
+    }
+
+    @keyframes flashing {
+        0% { opacity: 1; }
+        100% { opacity: 0; }
+    }
 </style>
 </head>
 <body>
@@ -52,6 +80,12 @@
         </div>
         <div class="status-update">
             Jason Quick is currently very angry. Please approach with caution.
+        </div>
+        <div class="status-box">
+            <div class="box normal">Normal</div>
+            <div class="box warning">Warning</div>
+            <div class="box danger">Danger</div>
+            <div class="box thermonuclear">Thermonuclear</div>
         </div>
     </div>
 </body>
