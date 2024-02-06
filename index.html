@@ -105,20 +105,9 @@
     </div>
 
     <script>
-        // Load previous log entries and last clicked status from localStorage
+        // Load previous log entries from localStorage
         document.addEventListener('DOMContentLoaded', function() {
             var logEntries = JSON.parse(localStorage.getItem('logEntries')) || [];
-            var lastStatus = localStorage.getItem('lastStatus');
-
-            // Restore last clicked status
-            if (lastStatus) {
-                var statusBox = document.querySelector('.box.' + lastStatus);
-                var level = statusBox.textContent;
-                var message = statusBox.dataset.message;
-                updateStatus(level, message, false); // Don't log this status as it's just restoration
-            }
-
-            // Display previous log entries
             var logContainer = document.getElementById('logContainer');
             logEntries.forEach(function(entry) {
                 var logEntry = document.createElement('div');
@@ -128,7 +117,7 @@
             });
         });
 
-        function updateStatus(level, message, log = true) {
+        function updateStatus(level, message) {
             var timestamp = new Date().toLocaleString();
             document.querySelector('.anger-level').textContent = level;
             document.querySelector('.status-update').textContent = message;
@@ -141,14 +130,9 @@
             logContainer.scrollTop = logContainer.scrollHeight;
 
             // Store log entry in localStorage
-            if (log) {
-                var logEntries = JSON.parse(localStorage.getItem('logEntries')) || [];
-                logEntries.push(logEntry);
-                localStorage.setItem('logEntries', JSON.stringify(logEntries));
-            }
-
-            // Store last clicked status in localStorage
-            localStorage.setItem('lastStatus', level);
+            var logEntries = JSON.parse(localStorage.getItem('logEntries')) || [];
+            logEntries.push(logEntry);
+            localStorage.setItem('logEntries', JSON.stringify(logEntries));
         }
     </script>
 </body>
