@@ -59,6 +59,19 @@
         font-weight: bold;
     }
 
+    .log-container {
+        margin-top: 20px;
+        max-height: 200px;
+        overflow-y: scroll;
+        border: 1px solid #ccc;
+        padding: 10px;
+    }
+
+    .log-entry {
+        font-size: 14px;
+        margin-bottom: 5px;
+    }
+
     .normal { background-color: #2ecc71; }
     .warning { background-color: #f1c40f; }
     .danger { background-color: #e74c3c; }
@@ -88,12 +101,19 @@
             <div class="box danger" onclick="updateStatus('Danger', 'Jason Quick is currently angry.')">Danger</div>
             <div class="box thermonuclear" onclick="updateStatus('Thermonuclear', 'Jason Quick is in a thermonuclear state of rage!')">Thermonuclear</div>
         </div>
+        <div class="log-container" id="logContainer"></div>
     </div>
 
     <script>
         function updateStatus(level, message) {
+            var timestamp = new Date().toLocaleString();
             document.querySelector('.anger-level').textContent = level;
             document.querySelector('.status-update').textContent = message;
+            var logEntry = document.createElement('div');
+            logEntry.className = 'log-entry';
+            logEntry.textContent = timestamp + ' - ' + message;
+            document.getElementById('logContainer').appendChild(logEntry);
+            document.getElementById('logContainer').scrollTop = document.getElementById('logContainer').scrollHeight;
         }
     </script>
 </body>
