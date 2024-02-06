@@ -50,6 +50,7 @@
     }
 
     .status-box .box {
+        cursor: pointer;
         width: 120px;
         height: 80px;
         text-align: center;
@@ -82,11 +83,17 @@
             Jason Quick is currently very angry. Please approach with caution.
         </div>
         <div class="status-box">
-            <div class="box normal">Normal</div>
-            <div class="box warning">Warning</div>
-            <div class="box danger">Danger</div>
-            <div class="box thermonuclear">Thermonuclear</div>
+            <div class="box normal" onclick="updateStatus('Normal')">Normal</div>
+            <div class="box warning" onclick="updateStatus('Warning')">Warning</div>
+            <div class="box danger" onclick="updateStatus('Danger')">Danger</div>
+            <div class="box thermonuclear" onclick="updateStatus('Thermonuclear')">Thermonuclear</div>
         </div>
     </div>
+
+    <script>
+        function updateStatus(level) {
+            document.querySelector('.anger-level').textContent = level;
+        }
+    </script>
 </body>
 </html>
